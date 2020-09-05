@@ -1,0 +1,101 @@
+.for-box{
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: black;
+    max-width: 1200px;
+    perspective: 500px;
+    .box{
+        width: 400px;
+        height: 400px;
+        position: relative;
+        transform-style: preserve-3d;
+        transform-origin: center center -175px;
+        transform: rotateX(0deg) rotateY(0deg)  rotateZ(0deg) ;
+        transition: 600ms;
+        .ground{
+            user-select: none;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            transition: 1000ms;
+        }
+        .ground1{
+            top: 50%;
+            left: 50%;
+            transform: translate3d(-50%,-50%,0);
+        }
+        .ground2{
+            top: 50%;
+            left: 50%;
+            transform-origin: left;
+            transform: translate3d(50%,-50%,0)  rotateY(90deg);
+        }
+        .ground3{
+            top: 50%;
+            left: 50%;
+            transform-origin: right;
+            transform: translate3d(-150%,-50%,0) rotateY(-90deg);
+        }
+        .ground4{
+            top: 50%;
+            left: 50%;
+            transform-origin: bottom;
+            transform: translate3d(-50%,-150%,0) rotateX(90deg);
+        }
+        .ground5{
+            top: 50%;
+            left: 50%;
+            transform-origin: top;
+            transform: translate3d(-50%,50%,0) rotateX(-90deg);
+        }
+        .ground6{
+            top: 50%;
+            left: 50%;
+            transform: translate3d(-50%,-50%,-350px) rotateY(180deg);
+        }
+        .ibg{
+            background-position: bottom center;
+        }
+        
+    }
+    .anim_active{
+        animation: RotateBox 5s infinite;
+        animation-direction: normal;
+    }
+    .hovered{
+        .ground2{
+            transform: translate3d(50%,-50%,0)  rotateY(0deg);
+        }
+        .ground3{
+            transform: translate3d(-150%,-50%,0) rotateY(0deg);
+        }
+        .ground4{
+            transform: translate3d(-50%,-150%,0) rotateX(0deg);
+        }
+        .ground5{
+            transform: translate3d(-50%,50%,0) rotateX(0deg);
+        }
+        .ground6{
+            transform: translate3d(-50%,-50%,-100px) rotateY(0deg);
+        }
+    }
+}
+@keyframes RotateBox{
+    0%{
+        transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    }
+    50%{
+        transform: rotateX(-280deg) rotateY(276deg) rotateZ(250deg);
+    }
+    100%{
+        transform: rotateX(0deg) rotateY(-360deg) rotateZ(360deg);
+    }
+}
