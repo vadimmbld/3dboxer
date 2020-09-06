@@ -1,3 +1,8 @@
+.no-transition {
+  -webkit-transition: none !important;
+  -o-transition: none !important;
+  transition: none !important; }
+
 .for-box {
   margin: 0 auto;
   display: -webkit-box;
@@ -114,6 +119,20 @@
   .for-box .hovered .ground6 {
     -webkit-transform: translate3d(-50%, -50%, -100px) rotateY(0deg);
     transform: translate3d(-50%, -50%, -100px) rotateY(0deg); }
+
+@media screen and (max-width: 600px) {
+  .for-box .box {
+    width: 250px;
+    height: 250px;
+    -webkit-transform-origin: center center -100px;
+    -ms-transform-origin: center center -100px;
+    transform-origin: center center -100px; }
+    .for-box .box .ground {
+      width: 200px;
+      height: 200px; }
+    .for-box .box .ground6 {
+      -webkit-transform: translate3d(-50%, -50%, -200px) rotateY(180deg);
+      transform: translate3d(-50%, -50%, -200px) rotateY(180deg); } }
 
 @-webkit-keyframes RotateBox {
   0% {

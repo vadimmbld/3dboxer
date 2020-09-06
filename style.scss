@@ -1,3 +1,6 @@
+.no-transition {
+    transition: none !important;
+  }
 .for-box{
     margin: 0 auto;
     display: flex;
@@ -85,6 +88,22 @@
         }
         .ground6{
             transform: translate3d(-50%,-50%,-100px) rotateY(0deg);
+        }
+    }
+}
+@media screen and (max-width:600px){
+    .for-box{
+        .box{
+            width: 250px;
+            height: 250px;
+            transform-origin: center center -100px;
+            .ground{
+                width: 200px;
+                height: 200px;
+            }
+            .ground6{
+                transform: translate3d(-50%,-50%,-200px) rotateY(180deg);
+            }
         }
     }
 }

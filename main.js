@@ -75,13 +75,17 @@ function Rotater(){
         $(this).parent().addClass('clicked').removeClass('anim_active');
         $animElem.css({     'webkitTransform': transformValue,
                             'transform': transformValue}).removeClass('anim_active');
-        requestAnimationFrame(function(){
-            $animElem.css({  'webkitTransform': 'rotateX(0deg) rotateY(0deg) rotateZ(0deg)',
-                            'transform': 'rotateX(0deg) rotateY(0deg) rotateZ(0deg)'});
-        })
         setTimeout(function(){
-            isAnimated = true;
-        },600)
+            if(!$animElem.hasClass('anim_active')){
+                $animElem.css({  'webkitTransform': 'rotateX(0deg) rotateY(0deg) rotateZ(0deg)','transform': 'rotateX(0deg) rotateY(0deg) rotateZ(0deg)'});
+                setTimeout(function(){
+                    isAnimated = true;
+                },600)
+            }
+        },30)
+        
+        
+        
 
     } 
 }
@@ -132,12 +136,41 @@ $(document).ready(function(){
             if(Math.abs(startMoveX-endMoveX) > 20 || Math.abs(startMoveY-endMoveY) > 20 ){
                 if(Math.abs(startMoveX-endMoveX) > Math.abs(startMoveY-endMoveY)){
                     if(startMoveX-endMoveX>0){
+                        let prevMatrix = $(this).css('transform');
+                        let prevValues = prevMatrix.split('(')[1].split(')')[0].split(',');
+                        let prevAngle =  Math.round(Math.atan2(prevValues[2], prevValues[0]) * (180/Math.PI));
                         currentGround = GroundsArr[currentGround].left;
-                        ResetRotate();
+                        if(prevAngle == -180){
+                            $(this).parent().css('transform','rotateX(0deg) rotateY(-270deg) rotateZ(0deg)');
+                            setTimeout(function(){
+                                $('#boxer3d').addClass('no-transition');
+                                $('#boxer3d').css('transform','rotateX(0deg) rotateY(90deg) rotateZ(0deg)');
+                                setTimeout(function(){
+                                    $('#boxer3d').removeClass('no-transition');
+                                },50)
+                            },500)
+                        }else{
+                            ResetRotate();
+                        }   
                         console.log('left')
                     }else{
+                        let prevMatrix = $(this).css('transform');
+                        let prevValues = prevMatrix.split('(')[1].split(')')[0].split(',');
+                        let prevAngle =  Math.round(Math.atan2(prevValues[2], prevValues[0]) * (180/Math.PI));
                         currentGround = GroundsArr[currentGround].right;
-                        ResetRotate();
+                        if(prevAngle == 90){
+                            $(this).parent().css('transform','rotateX(0deg) rotateY(180deg) rotateZ(0deg)');
+                            setTimeout(function(){
+                                $('#boxer3d').addClass('no-transition');
+                                $('#boxer3d').css('transform','rotateX(0deg) rotateY(-180deg) rotateZ(0deg)');
+                                setTimeout(function(){
+                                    $('#boxer3d').removeClass('no-transition');
+                                },50)
+                            },500)
+                        }else{
+                            ResetRotate();
+
+                        }   
                         console.log('right')
                     }
                 }else{
@@ -162,12 +195,192 @@ $(document).ready(function(){
             if(Math.abs(startMoveX-endMoveX) > 20 || Math.abs(startMoveY-endMoveY) > 20 ){
                 if(Math.abs(startMoveX-endMoveX) > Math.abs(startMoveY-endMoveY)){
                     if(startMoveX-endMoveX>0){
+                        let prevMatrix = $(this).css('transform');
+                        let prevValues = prevMatrix.split('(')[1].split(')')[0].split(',');
+                        let prevAngle =  Math.round(Math.atan2(prevValues[2], prevValues[0]) * (180/Math.PI));
                         currentGround = GroundsArr[currentGround].left;
-                        ResetRotate();
+                        if(prevAngle == -180){
+                            $(this).parent().css('transform','rotateX(0deg) rotateY(-270deg) rotateZ(0deg)');
+                            setTimeout(function(){
+                                $('#boxer3d').addClass('no-transition');
+                                $('#boxer3d').css('transform','rotateX(0deg) rotateY(90deg) rotateZ(0deg)');
+                                setTimeout(function(){
+                                    $('#boxer3d').removeClass('no-transition');
+                                },50)
+                            },500)
+                        }else{
+                            ResetRotate();
+                        }   
                         console.log('left')
                     }else{
+                        let prevMatrix = $(this).css('transform');
+                        let prevValues = prevMatrix.split('(')[1].split(')')[0].split(',');
+                        let prevAngle =  Math.round(Math.atan2(prevValues[2], prevValues[0]) * (180/Math.PI));
                         currentGround = GroundsArr[currentGround].right;
+                        if(prevAngle == 90){
+                            $(this).parent().css('transform','rotateX(0deg) rotateY(180deg) rotateZ(0deg)');
+                            setTimeout(function(){
+                                $('#boxer3d').addClass('no-transition');
+                                $('#boxer3d').css('transform','rotateX(0deg) rotateY(-180deg) rotateZ(0deg)');
+                                setTimeout(function(){
+                                    $('#boxer3d').removeClass('no-transition');
+                                },50)
+                            },500)
+                        }else{
+                            ResetRotate();
+
+                        }   
+                        console.log('right')
+                    }
+                }else{
+                    if(startMoveY-endMoveY>0){
+                        currentGround = GroundsArr[currentGround].bottom;
                         ResetRotate();
+                        console.log('bottom')
+                    }else{
+                        currentGround = GroundsArr[currentGround].top;
+                        ResetRotate();
+                        console.log('top')
+                    }
+                }
+            }
+            
+        }
+    })
+    $('#boxer3d .ground').on('touchstart', function(event){
+        if(isAnimated){
+            startMoveX = event.changedTouches[0].clientX - $(event.target).offset().left;
+            startMoveY = event.changedTouches[0].clientY - $(event.target).offset().left;
+        }
+    })
+    $('#boxer3d .ground').on('touchmove', function(event){
+        if(isAnimated){
+            let matrix = $(this).css('transform');
+            let values = matrix.split('(')[1].split(')')[0].split(',');
+            let a = values[0];
+            let b = values[2];
+            let c = values[5];
+            let d = values[6];
+            let angleY = Math.round(Math.atan2(b, a) * (180/Math.PI));
+            let angleX = Math.round(Math.atan2(d, c) * (180/Math.PI));
+            let touchX = event.changedTouches[0].clientX - $(event.target).offset().left; 
+            let touchY = event.changedTouches[0].clientY - $(event.target).offset().left; 
+            if(!angleY){
+                angleY = 0;
+            }
+            if(!angleX){
+                angleX = 0;
+            }
+            if(angleX == 90){
+                $(this).parent().css('transform','rotateX('+ -(touchY -startMoveY+angleX) +'deg) rotateY(0deg) rotateZ('+ (touchX-startMoveX+angleY) +'deg)')
+            }else if(angleX == -90){
+                $(this).parent().css('transform','rotateX('+ -(touchY-startMoveY+angleX) +'deg) rotateY(0deg) rotateZ('+ -(touchX-startMoveX+angleY) +'deg)')
+            }else{
+                $(this).parent().css('transform','rotateX('+ -(touchY-startMoveY+angleX) +'deg) rotateY(' + (touchX-startMoveX+angleY) + 'deg) rotateZ(0deg)')
+            }
+             
+        }
+    })
+    $('#boxer3d .ground').on('touchcancel', function(event){
+        if(isAnimated){;
+            endMoveX = event.changedTouches[0].clientX - $(event.target).offset().left;
+            endMoveY = event.changedTouches[0].clientY - $(event.target).offset().left;
+            if(Math.abs(startMoveX-endMoveX) > 20 || Math.abs(startMoveY-endMoveY) > 20 ){
+                if(Math.abs(startMoveX-endMoveX) > Math.abs(startMoveY-endMoveY)){
+                    if(startMoveX-endMoveX>0){
+                        let prevMatrix = $(this).css('transform');
+                        let prevValues = prevMatrix.split('(')[1].split(')')[0].split(',');
+                        let prevAngle =  Math.round(Math.atan2(prevValues[2], prevValues[0]) * (180/Math.PI));
+                        currentGround = GroundsArr[currentGround].left;
+                        if(prevAngle == -180){
+                            $(this).parent().css('transform','rotateX(0deg) rotateY(-270deg) rotateZ(0deg)');
+                            setTimeout(function(){
+                                $('#boxer3d').addClass('no-transition');
+                                $('#boxer3d').css('transform','rotateX(0deg) rotateY(90deg) rotateZ(0deg)');
+                                setTimeout(function(){
+                                    $('#boxer3d').removeClass('no-transition');
+                                },50)
+                            },500)
+                        }else{
+                            ResetRotate();
+                        }   
+                        console.log('left')
+                    }else{
+                        let prevMatrix = $(this).css('transform');
+                        let prevValues = prevMatrix.split('(')[1].split(')')[0].split(',');
+                        let prevAngle =  Math.round(Math.atan2(prevValues[2], prevValues[0]) * (180/Math.PI));
+                        currentGround = GroundsArr[currentGround].right;
+                        if(prevAngle == 90){
+                            $(this).parent().css('transform','rotateX(0deg) rotateY(180deg) rotateZ(0deg)');
+                            setTimeout(function(){
+                                $('#boxer3d').addClass('no-transition');
+                                $('#boxer3d').css('transform','rotateX(0deg) rotateY(-180deg) rotateZ(0deg)');
+                                setTimeout(function(){
+                                    $('#boxer3d').removeClass('no-transition');
+                                },50)
+                            },500)
+                        }else{
+                            ResetRotate();
+
+                        }   
+                        console.log('right')
+                    }
+                }else{
+                    if(startMoveY-endMoveY>0){
+                        currentGround = GroundsArr[currentGround].bottom;
+                        ResetRotate();
+                        console.log('bottom')
+                    }else{
+                        currentGround = GroundsArr[currentGround].top; 
+                        ResetRotate();
+                        console.log('top')
+                    }
+                }
+            }
+        }
+    })
+    $('#boxer3d .ground').on('touchend', function(event){
+        if(isAnimated){
+            endMoveX = event.changedTouches[0].clientX - $(event.target).offset().left;
+            endMoveY = event.changedTouches[0].clientY - $(event.target).offset().left;
+            if(Math.abs(startMoveX-endMoveX) > 20 || Math.abs(startMoveY-endMoveY) > 20 ){
+                if(Math.abs(startMoveX-endMoveX) > Math.abs(startMoveY-endMoveY)){
+                    if(startMoveX-endMoveX>0){
+                        let prevMatrix = $(this).css('transform');
+                        let prevValues = prevMatrix.split('(')[1].split(')')[0].split(',');
+                        let prevAngle =  Math.round(Math.atan2(prevValues[2], prevValues[0]) * (180/Math.PI));
+                        currentGround = GroundsArr[currentGround].left;
+                        if(prevAngle == -180){
+                            $(this).parent().css('transform','rotateX(0deg) rotateY(-270deg) rotateZ(0deg)');
+                            setTimeout(function(){
+                                $('#boxer3d').addClass('no-transition');
+                                $('#boxer3d').css('transform','rotateX(0deg) rotateY(90deg) rotateZ(0deg)');
+                                setTimeout(function(){
+                                    $('#boxer3d').removeClass('no-transition');
+                                },50)
+                            },500)
+                        }else{
+                            ResetRotate();
+                        }   
+                        console.log('left')
+                    }else{
+                        let prevMatrix = $(this).css('transform');
+                        let prevValues = prevMatrix.split('(')[1].split(')')[0].split(',');
+                        let prevAngle =  Math.round(Math.atan2(prevValues[2], prevValues[0]) * (180/Math.PI));
+                        currentGround = GroundsArr[currentGround].right;
+                        if(prevAngle == 90){
+                            $(this).parent().css('transform','rotateX(0deg) rotateY(180deg) rotateZ(0deg)');
+                            setTimeout(function(){
+                                $('#boxer3d').addClass('no-transition');
+                                $('#boxer3d').css('transform','rotateX(0deg) rotateY(-180deg) rotateZ(0deg)');
+                                setTimeout(function(){
+                                    $('#boxer3d').removeClass('no-transition');
+                                },50)
+                            },500)
+                        }else{
+                            ResetRotate();
+
+                        }   
                         console.log('right')
                     }
                 }else{
