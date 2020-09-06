@@ -248,12 +248,14 @@ $(document).ready(function(){
         }
     })
     $('#boxer3d .ground').on('touchstart', function(event){
+        event.preventDefault();
         if(isAnimated){
             startMoveX = event.changedTouches[0].clientX - $(event.target).offset().left;
             startMoveY = event.changedTouches[0].clientY - $(event.target).offset().left;
         }
     })
     $('#boxer3d .ground').on('touchmove', function(event){
+        event.preventDefault();
         if(isAnimated){
             let matrix = $(this).css('transform');
             let values = matrix.split('(')[1].split(')')[0].split(',');
@@ -340,6 +342,7 @@ $(document).ready(function(){
         }
     })
     $('#boxer3d .ground').on('touchend', function(event){
+        event.preventDefault();
         if(isAnimated){
             endMoveX = event.changedTouches[0].clientX - $(event.target).offset().left;
             endMoveY = event.changedTouches[0].clientY - $(event.target).offset().left;
