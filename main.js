@@ -142,11 +142,13 @@ $(document).ready(function(){
                         currentGround = GroundsArr[currentGround].left;
                         if(prevAngle == -180){
                             $(this).parent().css('transform','rotateX(0deg) rotateY(-270deg) rotateZ(0deg)');
+                            isAnimated = false;
                             setTimeout(function(){
                                 $('#boxer3d').addClass('no-transition');
                                 $('#boxer3d').css('transform','rotateX(0deg) rotateY(90deg) rotateZ(0deg)');
                                 setTimeout(function(){
                                     $('#boxer3d').removeClass('no-transition');
+                                    isAnimated = true;
                                 },50)
                             },500)
                         }else{
@@ -160,11 +162,13 @@ $(document).ready(function(){
                         currentGround = GroundsArr[currentGround].right;
                         if(prevAngle == 90){
                             $(this).parent().css('transform','rotateX(0deg) rotateY(180deg) rotateZ(0deg)');
+                            isAnimated = false;
                             setTimeout(function(){
                                 $('#boxer3d').addClass('no-transition');
                                 $('#boxer3d').css('transform','rotateX(0deg) rotateY(-180deg) rotateZ(0deg)');
                                 setTimeout(function(){
                                     $('#boxer3d').removeClass('no-transition');
+                                    isAnimated = true;
                                 },50)
                             },500)
                         }else{
@@ -201,11 +205,13 @@ $(document).ready(function(){
                         currentGround = GroundsArr[currentGround].left;
                         if(prevAngle == -180){
                             $(this).parent().css('transform','rotateX(0deg) rotateY(-270deg) rotateZ(0deg)');
+                            isAnimated = false;
                             setTimeout(function(){
                                 $('#boxer3d').addClass('no-transition');
                                 $('#boxer3d').css('transform','rotateX(0deg) rotateY(90deg) rotateZ(0deg)');
                                 setTimeout(function(){
                                     $('#boxer3d').removeClass('no-transition');
+                                    isAnimated = true;
                                 },50)
                             },500)
                         }else{
@@ -219,11 +225,13 @@ $(document).ready(function(){
                         currentGround = GroundsArr[currentGround].right;
                         if(prevAngle == 90){
                             $(this).parent().css('transform','rotateX(0deg) rotateY(180deg) rotateZ(0deg)');
+                            isAnimated = false;
                             setTimeout(function(){
                                 $('#boxer3d').addClass('no-transition');
                                 $('#boxer3d').css('transform','rotateX(0deg) rotateY(-180deg) rotateZ(0deg)');
                                 setTimeout(function(){
                                     $('#boxer3d').removeClass('no-transition');
+                                    isAnimated = true;
                                 },50)
                             },500)
                         }else{
@@ -248,7 +256,6 @@ $(document).ready(function(){
         }
     })
     $('#boxer3d .ground').on('touchstart', function(event){
-        event.preventDefault();
         if(isAnimated){
             startMoveX = event.changedTouches[0].clientX - $(event.target).offset().left;
             startMoveY = event.changedTouches[0].clientY - $(event.target).offset().left;
@@ -296,11 +303,13 @@ $(document).ready(function(){
                         currentGround = GroundsArr[currentGround].left;
                         if(prevAngle == -180){
                             $(this).parent().css('transform','rotateX(0deg) rotateY(-270deg) rotateZ(0deg)');
+                            isAnimated = false;
                             setTimeout(function(){
                                 $('#boxer3d').addClass('no-transition');
                                 $('#boxer3d').css('transform','rotateX(0deg) rotateY(90deg) rotateZ(0deg)');
                                 setTimeout(function(){
                                     $('#boxer3d').removeClass('no-transition');
+                                    isAnimated = true;
                                 },50)
                             },500)
                         }else{
@@ -314,11 +323,14 @@ $(document).ready(function(){
                         currentGround = GroundsArr[currentGround].right;
                         if(prevAngle == 90){
                             $(this).parent().css('transform','rotateX(0deg) rotateY(180deg) rotateZ(0deg)');
+                            isAnimated = false;
                             setTimeout(function(){
+                                
                                 $('#boxer3d').addClass('no-transition');
                                 $('#boxer3d').css('transform','rotateX(0deg) rotateY(-180deg) rotateZ(0deg)');
                                 setTimeout(function(){
                                     $('#boxer3d').removeClass('no-transition');
+                                    isAnimated = true;
                                 },50)
                             },500)
                         }else{
@@ -342,7 +354,7 @@ $(document).ready(function(){
         }
     })
     $('#boxer3d .ground').on('touchend', function(event){
-        event.preventDefault();
+
         if(isAnimated){
             endMoveX = event.changedTouches[0].clientX - $(event.target).offset().left;
             endMoveY = event.changedTouches[0].clientY - $(event.target).offset().left;
@@ -355,11 +367,13 @@ $(document).ready(function(){
                         currentGround = GroundsArr[currentGround].left;
                         if(prevAngle == -180){
                             $(this).parent().css('transform','rotateX(0deg) rotateY(-270deg) rotateZ(0deg)');
+                            isAnimated = false;
                             setTimeout(function(){
                                 $('#boxer3d').addClass('no-transition');
                                 $('#boxer3d').css('transform','rotateX(0deg) rotateY(90deg) rotateZ(0deg)');
                                 setTimeout(function(){
                                     $('#boxer3d').removeClass('no-transition');
+                                    isAnimated =true;
                                 },50)
                             },500)
                         }else{
@@ -373,13 +387,15 @@ $(document).ready(function(){
                         currentGround = GroundsArr[currentGround].right;
                         if(prevAngle == 90){
                             $(this).parent().css('transform','rotateX(0deg) rotateY(180deg) rotateZ(0deg)');
+                            isAnimated = false;
                             setTimeout(function(){
                                 $('#boxer3d').addClass('no-transition');
                                 $('#boxer3d').css('transform','rotateX(0deg) rotateY(-180deg) rotateZ(0deg)');
                                 setTimeout(function(){
                                     $('#boxer3d').removeClass('no-transition');
+                                    isAnimated =true;
                                 },50)
-                            },500)
+                            },550)
                         }else{
                             ResetRotate();
 
