@@ -1,6 +1,6 @@
 let isAnimated = false;
 let isMouseDown = false;
-let isVertical = true;
+let isTouch = false;
 let Grounds = $('#boxer3d .ground');
 let GroundsArr = [];
 GroundsArr[0] = { 
@@ -45,7 +45,6 @@ let currentGround = 0;
 function ResetRotate(){
     let slide = Grounds[currentGround];
     let matrix = $(slide).css('transform');
-    console.log(currentGround);
     let values = matrix.split('(')[1].split(')')[0].split(',');
     let a = values[0];
     let b = values[2];
@@ -119,11 +118,11 @@ $(document).ready(function(){
                 angleX = 0;
             }
             if(angleX == 90){
-                $(this).parent().css('transform','rotateX('+ -(event.offsetY-startMoveY+angleX) +'deg) rotateY(0deg) rotateZ('+ (event.offsetX-startMoveX+angleY) +'deg)')
+                $(this).parent().css('transform','rotateX('+ -(event.offsetY-startMoveY+angleX)/1.5 +'deg) rotateY(0deg) rotateZ('+ (event.offsetX-startMoveX+angleY)/1.5 +'deg)')
             }else if(angleX == -90){
-                $(this).parent().css('transform','rotateX('+ -(event.offsetY-startMoveY+angleX) +'deg) rotateY(0deg) rotateZ('+ -(event.offsetX-startMoveX+angleY) +'deg)')
+                $(this).parent().css('transform','rotateX('+ -(event.offsetY-startMoveY+angleX)/1.5 +'deg) rotateY(0deg) rotateZ('+ -(event.offsetX-startMoveX+angleY)/1.5 +'deg)')
             }else{
-                $(this).parent().css('transform','rotateX('+ -(event.offsetY-startMoveY+angleX) +'deg) rotateY(' + (event.offsetX-startMoveX+angleY) + 'deg) rotateZ(0deg)')
+                $(this).parent().css('transform','rotateX('+ -(event.offsetY-startMoveY+angleX)/1.5 +'deg) rotateY(' + (event.offsetX-startMoveX+angleY)/1.5 + 'deg) rotateZ(0deg)')
             }
              
         }
@@ -154,7 +153,6 @@ $(document).ready(function(){
                         }else{
                             ResetRotate();
                         }   
-                        console.log('left')
                     }else{
                         let prevMatrix = $(this).css('transform');
                         let prevValues = prevMatrix.split('(')[1].split(')')[0].split(',');
@@ -175,23 +173,21 @@ $(document).ready(function(){
                             ResetRotate();
 
                         }   
-                        console.log('right')
                     }
                 }else{
                     if(startMoveY-endMoveY>0){
                         currentGround = GroundsArr[currentGround].bottom;
                         ResetRotate();
-                        console.log('bottom')
                     }else{
                         currentGround = GroundsArr[currentGround].top; 
                         ResetRotate();
-                        console.log('top')
                     }
                 }
             }
         }
     })
     $('#boxer3d .ground').on('mouseup', function(event){
+        console.log(event , isMouseDown);
         if(isAnimated && isMouseDown){
             isMouseDown = false;
             endMoveX = event.offsetX;
@@ -217,7 +213,6 @@ $(document).ready(function(){
                         }else{
                             ResetRotate();
                         }   
-                        console.log('left')
                     }else{
                         let prevMatrix = $(this).css('transform');
                         let prevValues = prevMatrix.split('(')[1].split(')')[0].split(',');
@@ -238,17 +233,14 @@ $(document).ready(function(){
                             ResetRotate();
 
                         }   
-                        console.log('right')
                     }
                 }else{
                     if(startMoveY-endMoveY>0){
                         currentGround = GroundsArr[currentGround].bottom;
                         ResetRotate();
-                        console.log('bottom')
                     }else{
                         currentGround = GroundsArr[currentGround].top;
                         ResetRotate();
-                        console.log('top')
                     }
                 }
             }
@@ -256,6 +248,7 @@ $(document).ready(function(){
         }
     })
     $('#boxer3d .ground').on('touchstart', function(event){
+        isTouch = true;
         if(isAnimated){
             startMoveX = event.changedTouches[0].clientX - $(event.target).offset().left;
             startMoveY = event.changedTouches[0].clientY - $(event.target).offset().left;
@@ -263,31 +256,88 @@ $(document).ready(function(){
     })
     $('#boxer3d .ground').on('touchmove', function(event){
         event.preventDefault();
-        if(isAnimated){
-            let matrix = $(this).css('transform');
-            let values = matrix.split('(')[1].split(')')[0].split(',');
-            let a = values[0];
-            let b = values[2];
-            let c = values[5];
-            let d = values[6];
-            let angleY = Math.round(Math.atan2(b, a) * (180/Math.PI));
-            let angleX = Math.round(Math.atan2(d, c) * (180/Math.PI));
-            let touchX = event.changedTouches[0].clientX - $(event.target).offset().left; 
-            let touchY = event.changedTouches[0].clientY - $(event.target).offset().left; 
-            if(!angleY){
-                angleY = 0;
-            }
-            if(!angleX){
-                angleX = 0;
-            }
-            if(angleX == 90){
-                $(this).parent().css('transform','rotateX('+ -(touchY -startMoveY+angleX) +'deg) rotateY(0deg) rotateZ('+ (touchX-startMoveX+angleY) +'deg)')
-            }else if(angleX == -90){
-                $(this).parent().css('transform','rotateX('+ -(touchY-startMoveY+angleX) +'deg) rotateY(0deg) rotateZ('+ -(touchX-startMoveX+angleY) +'deg)')
+        if(isAnimated && isTouch){
+            if(document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY) == event.target){
+                let matrix = $(this).css('transform');
+                let values = matrix.split('(')[1].split(')')[0].split(',');
+                let a = values[0];
+                let b = values[2];
+                let c = values[5];
+                let d = values[6];
+                let angleY = Math.round(Math.atan2(b, a) * (180/Math.PI));
+                let angleX = Math.round(Math.atan2(d, c) * (180/Math.PI));
+                let touchX = event.changedTouches[0].clientX - $(event.target).offset().left; 
+                let touchY = event.changedTouches[0].clientY - $(event.target).offset().left; 
+                if(!angleY){
+                    angleY = 0;
+                }
+                if(!angleX){
+                    angleX = 0;
+                }
+                if(angleX == 90){
+                    $(this).parent().css('transform','rotateX('+ -(touchY-startMoveY+angleX)/1.5 +'deg) rotateY(0deg) rotateZ('+ (touchX-startMoveX+angleY)/1.5 +'deg)')
+                }else if(angleX == -90){
+                    $(this).parent().css('transform','rotateX('+ -(touchY-startMoveY+angleX)/1.5 +'deg) rotateY(0deg) rotateZ('+ -(touchX-startMoveX+angleY)/1.5 +'deg)')
+                }else{
+                    $(this).parent().css('transform','rotateX('+ -(touchY-startMoveY+angleX)/1.5 +'deg) rotateY(' + (touchX-startMoveX+angleY)/1.5 + 'deg) rotateZ(0deg)')
+                }
             }else{
-                $(this).parent().css('transform','rotateX('+ -(touchY-startMoveY+angleX) +'deg) rotateY(' + (touchX-startMoveX+angleY) + 'deg) rotateZ(0deg)')
+                isTouch = false;
+                endMoveX = event.changedTouches[0].clientX - $(event.target).offset().left;
+                endMoveY = event.changedTouches[0].clientY - $(event.target).offset().left;
+                if(Math.abs(startMoveX-endMoveX) > 20 || Math.abs(startMoveY-endMoveY) > 20 ){
+                    if(Math.abs(startMoveX-endMoveX) > Math.abs(startMoveY-endMoveY)){
+                        if(startMoveX-endMoveX>0){
+                            let prevMatrix = $(this).css('transform');
+                            let prevValues = prevMatrix.split('(')[1].split(')')[0].split(',');
+                            let prevAngle =  Math.round(Math.atan2(prevValues[2], prevValues[0]) * (180/Math.PI));
+                            currentGround = GroundsArr[currentGround].left;
+                            if(prevAngle == -180){
+                                $(this).parent().css('transform','rotateX(0deg) rotateY(-270deg) rotateZ(0deg)');
+                                isAnimated = false;
+                                setTimeout(function(){
+                                    $('#boxer3d').addClass('no-transition');
+                                    $('#boxer3d').css('transform','rotateX(0deg) rotateY(90deg) rotateZ(0deg)');
+                                    setTimeout(function(){
+                                        $('#boxer3d').removeClass('no-transition');
+                                        isAnimated =true;
+                                    },50)
+                                },500)
+                            }else{
+                                ResetRotate();
+                            }   
+                        }else{
+                            let prevMatrix = $(this).css('transform');
+                            let prevValues = prevMatrix.split('(')[1].split(')')[0].split(',');
+                            let prevAngle =  Math.round(Math.atan2(prevValues[2], prevValues[0]) * (180/Math.PI));
+                            currentGround = GroundsArr[currentGround].right;
+                            if(prevAngle == 90){
+                                $(this).parent().css('transform','rotateX(0deg) rotateY(180deg) rotateZ(0deg)');
+                                isAnimated = false;
+                                setTimeout(function(){
+                                    $('#boxer3d').addClass('no-transition');
+                                    $('#boxer3d').css('transform','rotateX(0deg) rotateY(-180deg) rotateZ(0deg)');
+                                    setTimeout(function(){
+                                        $('#boxer3d').removeClass('no-transition');
+                                        isAnimated =true;
+                                    },50)
+                                },550)
+                            }else{
+                                ResetRotate();
+
+                            }   
+                        }
+                    }else{
+                        if(startMoveY-endMoveY>0){
+                            currentGround = GroundsArr[currentGround].bottom;
+                            ResetRotate();
+                        }else{
+                            currentGround = GroundsArr[currentGround].top;
+                            ResetRotate();
+                        }
+                    }
+                }
             }
-             
         }
     })
     $('#boxer3d .ground').on('touchcancel', function(event){
@@ -315,7 +365,6 @@ $(document).ready(function(){
                         }else{
                             ResetRotate();
                         }   
-                        console.log('left')
                     }else{
                         let prevMatrix = $(this).css('transform');
                         let prevValues = prevMatrix.split('(')[1].split(')')[0].split(',');
@@ -337,25 +386,21 @@ $(document).ready(function(){
                             ResetRotate();
 
                         }   
-                        console.log('right')
                     }
                 }else{
                     if(startMoveY-endMoveY>0){
                         currentGround = GroundsArr[currentGround].bottom;
                         ResetRotate();
-                        console.log('bottom')
                     }else{
                         currentGround = GroundsArr[currentGround].top; 
                         ResetRotate();
-                        console.log('top')
                     }
                 }
             }
         }
     })
     $('#boxer3d .ground').on('touchend', function(event){
-
-        if(isAnimated){
+        if(isAnimated && isTouch){
             endMoveX = event.changedTouches[0].clientX - $(event.target).offset().left;
             endMoveY = event.changedTouches[0].clientY - $(event.target).offset().left;
             if(Math.abs(startMoveX-endMoveX) > 20 || Math.abs(startMoveY-endMoveY) > 20 ){
@@ -379,7 +424,6 @@ $(document).ready(function(){
                         }else{
                             ResetRotate();
                         }   
-                        console.log('left')
                     }else{
                         let prevMatrix = $(this).css('transform');
                         let prevValues = prevMatrix.split('(')[1].split(')')[0].split(',');
@@ -400,21 +444,18 @@ $(document).ready(function(){
                             ResetRotate();
 
                         }   
-                        console.log('right')
                     }
                 }else{
                     if(startMoveY-endMoveY>0){
                         currentGround = GroundsArr[currentGround].bottom;
                         ResetRotate();
-                        console.log('bottom')
                     }else{
                         currentGround = GroundsArr[currentGround].top;
                         ResetRotate();
-                        console.log('top')
                     }
                 }
             }
-            
+            isTouch = false;
         }
     })
 })
